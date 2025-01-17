@@ -29,9 +29,8 @@ class BlastingBusinessAgent:
                 "Environmental compliance score"
             ]
         }
-        
+    
     def analyze_project(self, project_data):
-        """Analyze project data and provide recommendations"""
         recommendations = []
         risks = []
         opportunities = []
@@ -42,12 +41,12 @@ class BlastingBusinessAgent:
             recommendations.append("Consider cost optimization strategies such as bulk material purchasing")
         
         # Analyze timeline
-        if project_data['timeline'] < 30:  # If project is less than 30 days
+        if project_data['timeline'] < 30:
             risks.append("Accelerated timeline may impact safety protocols")
             recommendations.append("Implement expedited safety check procedures")
         
         # Analyze scope
-        if project_data['blast_volume'] > 10000:  # cubic meters
+        if project_data['blast_volume'] > 10000:
             opportunities.append("Large project scope allows for economies of scale")
             recommendations.append("Consider investing in automated drilling equipment")
         
@@ -58,7 +57,6 @@ class BlastingBusinessAgent:
         }
     
     def calculate_roi(self, project_data):
-        """Calculate estimated ROI for the project"""
         total_cost = project_data['estimated_cost']
         expected_revenue = project_data['expected_revenue']
         
@@ -66,7 +64,6 @@ class BlastingBusinessAgent:
         return roi
     
     def generate_safety_checklist(self):
-        """Generate safety checklist based on project parameters"""
         return [
             "Verify all permits are in place",
             "Conduct pre-blast site survey",
@@ -83,7 +80,6 @@ def main():
     st.title("AI Business Strategist - Blasting Domain")
     st.write("An intelligent assistant for blasting project analysis and recommendations")
     
-    # Sidebar for project input
     st.sidebar.header("Project Parameters")
     
     project_data = {
@@ -95,28 +91,22 @@ def main():
         "blast_volume": st.sidebar.number_input("Blast Volume (cubic meters)", min_value=0, value=5000)
     }
     
-    # Initialize agent
     agent = BlastingBusinessAgent()
     
-    # Main content area
     if st.button("Analyze Project"):
         st.header("Project Analysis")
         
-        # Get analysis results
         analysis = agent.analyze_project(project_data)
         roi = agent.calculate_roi(project_data)
         safety_checklist = agent.generate_safety_checklist()
         
-        # Display ROI
         st.subheader("Financial Analysis")
         st.metric("Projected ROI", f"{roi:.1f}%")
         
-        # Display recommendations
         st.subheader("Recommendations")
         for rec in analysis['recommendations']:
             st.write(f"• {rec}")
             
-        # Display risks and opportunities
         col1, col2 = st.columns(2)
         with col1:
             st.subheader("Risks")
@@ -128,12 +118,10 @@ def main():
             for opp in analysis['opportunities']:
                 st.write(f"• {opp}")
         
-        # Display safety checklist
         st.subheader("Safety Checklist")
         for item in safety_checklist:
             st.checkbox(item, key=item)
         
-        # Add export functionality
         if st.button("Export Analysis"):
             export_data = {
                 "project_data": project_data,
