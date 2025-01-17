@@ -10,8 +10,7 @@ openai.api_key = "sk-proj-GetT5m9EGYr7b7N1f9cNevTwz3cg_P21GoEM5raB4-hpsfowL6RUYz
 import pinecone
 
 # Initialize Pinecone client
-pc = pinecone.Pinecone(api_key="pcsk_4AD5o8_Aan16jdGUz2suKbfVLprdYxnc5x2ZTybempWVeAjoNUfQmRERkJGP1WPemnrThG
-")
+pc = pinecone.Pinecone(api_key="pcsk_4AD5o8_Aan16jdGUz2suKbfVLprdYxnc5x2ZTybempWVeAjoNUfQmRERkJGP1WPemnrThG")
 
 # Connect to the Pinecone index
 index = pc.Index("blasting-strategist")
