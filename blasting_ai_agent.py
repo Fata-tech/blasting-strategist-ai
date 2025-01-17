@@ -4,14 +4,15 @@ import pinecone
 import json
 import streamlit as st
 import os
+import streamlit as st
 
-# Load API keys from Streamlit secrets or environment variables
 openai.api_key = st.secrets["OPENAI_API_KEY"] if "OPENAI_API_KEY" in st.secrets else os.getenv("OPENAI_API_KEY")
 pinecone_api_key = st.secrets["PINECONE_API_KEY"] if "PINECONE_API_KEY" in st.secrets else os.getenv("PINECONE_API_KEY")
 
 if not openai.api_key or not pinecone_api_key:
-    st.error("API keys missing! Set them in Streamlit secrets or environment variables.")
+    st.error("API keys are missing! Please set them in Streamlit secrets or environment variables.")
     st.stop()
+
 
 # Initialize Pinecone client
 pinecone.init(api_key=pinecone_api_key, environment="us-west1-gcp")
