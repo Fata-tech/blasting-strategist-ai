@@ -7,8 +7,15 @@ import streamlit as st
 openai.api_key = "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"
 
 # Initialize Pinecone for Vector Search (Replace with actual API key & index)
-pinecone.init(api_key="pcsk_4AD5o8_Aan16jdGUz2suKbfVLprdYxnc5x2ZTybempWVeAjoNUfQmRERkJGP1WPemnrThG", environment="us-west1-gcp")
-index = pinecone.Index("blasting-strategist")
+import pinecone
+
+# Initialize Pinecone client
+pc = pinecone.Pinecone(api_key="pcsk_4AD5o8_Aan16jdGUz2suKbfVLprdYxnc5x2ZTybempWVeAjoNUfQmRERkJGP1WPemnrThG
+")
+
+# Connect to the Pinecone index
+index = pc.Index("blasting-strategist")
+
 
 # Function to load reports into the knowledge base
 def load_reports(reports):
