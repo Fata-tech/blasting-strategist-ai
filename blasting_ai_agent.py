@@ -6,17 +6,17 @@ import streamlit as st
 # Initialize OpenAI API (Replace 'YOUR_API_KEY' with your actual key)
 openai.api_key = "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"
 
-# Initialize Pinecone client
-pinecone.init(api_key="pcsk_4AD5o8_Aan16jdGUz2suKbfVLprdYxnc5x2ZTybempWVeAjoNUfQmRERkJGP1WPemnrThG", environment="us-west1-gcp")
+# Initialize Pinecone client with updated syntax
+pc = pinecone.Pinecone(api_key="pcsk_4AD5o8_Aan16jdGUz2suKbfVLprdYxnc5x2ZTybempWVeAjoNUfQmRERkJGP1WPemnrThG")
 
 # Check if Pinecone index exists before connecting
 index_name = "blasting-strategist"
-existing_indexes = pinecone.list_indexes()
+existing_indexes = [i.name for i in pc.list_indexes()]
 if index_name not in existing_indexes:
     print(f"Error: Pinecone index '{index_name}' not found. Available indexes: {existing_indexes}")
     exit()
 
-index = pinecone.Index(index_name)
+index = pc.Index(index_name)
 
 # Function to load reports into the knowledge base
 def load_reports(reports):
