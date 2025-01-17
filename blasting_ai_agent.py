@@ -6,8 +6,8 @@ import streamlit as st
 import os
 
 # Load API keys from Streamlit secrets or environment variables
-openai.api_key = st.secrets["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"] if "OPENAI_API_KEY" in st.secrets else os.getenv("OPENAI_API_KEY")
-pinecone_api_key = st.secrets["pcsk_4AD5o8_Aan16jdGUz2suKbfVLprdYxnc5x2ZTybempWVeAjoNUfQmRERkJGP1WPemnrThG"] if "PINECONE_API_KEY" in st.secrets else os.getenv("PINECONE_API_KEY")
+openai.api_key = st.secrets["OPENAI_API_KEY"] if "OPENAI_API_KEY" in st.secrets else os.getenv("OPENAI_API_KEY")
+pinecone_api_key = st.secrets["PINECONE_API_KEY"] if "PINECONE_API_KEY" in st.secrets else os.getenv("PINECONE_API_KEY")
 
 if not openai.api_key or not pinecone_api_key:
     st.error("API keys missing! Set them in Streamlit secrets or environment variables.")
