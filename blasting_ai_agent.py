@@ -1,22 +1,28 @@
+# blasting_ai_agent.py
 import openai
 import pinecone
 import json
 import streamlit as st
+import os
 
-# Initialize OpenAI API (Replace 'YOUR_API_KEY' with your actual key)
-openai.api_key = "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"
+# Load API keys from Streamlit secrets or environment variables
+openai.api_key = st.secrets["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"] if "OPENAI_API_KEY" in st.secrets else os.getenv("OPENAI_API_KEY")
+pinecone_api_key = st.secrets["pcsk_4AD5o8_Aan16jdGUz2suKbfVLprdYxnc5x2ZTybempWVeAjoNUfQmRERkJGP1WPemnrThG"] if "PINECONE_API_KEY" in st.secrets else os.getenv("PINECONE_API_KEY")
 
-# Initialize Pinecone client with updated syntax
-pc = pinecone.Pinecone(api_key="pcsk_4AD5o8_Aan16jdGUz2suKbfVLprdYxnc5x2ZTybempWVeAjoNUfQmRERkJGP1WPemnrThG")
+if not openai.api_key or not pinecone_api_key:
+    st.error("API keys missing! Set them in Streamlit secrets or environment variables.")
+    st.stop()
 
-# Check if Pinecone index exists before connecting
+# Initialize Pinecone client
+pinecone.init(api_key=pinecone_api_key, environment="us-west1-gcp")
+
+# Check if Pinecone index exists
 index_name = "blasting-strategist"
-existing_indexes = [i.name for i in pc.list_indexes()]
-if index_name not in existing_indexes:
-    print(f"Error: Pinecone index '{index_name}' not found. Available indexes: {existing_indexes}")
-    exit()
+if index_name not in pinecone.list_indexes():
+    st.error(f"Pinecone index '{index_name}' not found. Available indexes: {pinecone.list_indexes()}")
+    st.stop()
 
-index = pc.Index(index_name)
+index = pinecone.Index(index_name)
 
 # Function to load reports into the knowledge base
 def load_reports(reports):
@@ -29,12 +35,12 @@ def load_reports(reports):
 def ask_blasting_ai(query):
     query_embedding = openai.Embedding.create(input=query, model="text-embedding-ada-002")["data"][0]["embedding"]
     results = index.query(query_embedding, top_k=3, include_metadata=True)
-    
-    if not results["matches"]:
+
+    if not results.get("matches"):
         return "No relevant data found in the knowledge base."
-    
+
     context = "\n\n".join([item["metadata"].get("content", "No content available") for item in results["matches"]])
-    
+
     prompt = f"""
     You are a business strategist AI specialized in the mining and blasting industry.
     Based on the following knowledge base, provide a strategic answer to the question:
@@ -44,13 +50,13 @@ def ask_blasting_ai(query):
     
     Question: {query}
     """
-    
+
     response = openai.ChatCompletion.create(
         model="gpt-4",
         messages=[{"role": "system", "content": "You are an expert in the mining and blasting industry."},
                   {"role": "user", "content": prompt}]
     )
-    
+
     return response["choices"][0]["message"]["content"]
 
 # Streamlit UI
